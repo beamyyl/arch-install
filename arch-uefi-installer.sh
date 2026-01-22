@@ -1,6 +1,6 @@
 # ----------------------------------------------------------
 # made by beamyyl
-# This is the UEFI Arch Linux systemd installer.
+# This is the UEFI Arch Linux installer.
 # ----------------------------------------------------------
 #!/bin/bash
 set -e
