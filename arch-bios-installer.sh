@@ -37,7 +37,7 @@ locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Hostname
-echo "arch-bios" > /etc/hostname
+echo "arch" > /etc/hostname
 
 # Networking & Cron (from your Gentoo list)
 systemctl enable NetworkManager
