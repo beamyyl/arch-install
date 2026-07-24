@@ -121,7 +121,7 @@ info "============================================================"
 echo ""
 
 info "Installing base and the kernel..."
-pacstrap /mnt -K base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux linux-firmware
 
 # =============================================================================
 # fstab
