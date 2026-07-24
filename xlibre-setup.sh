@@ -7,5 +7,6 @@ sudo tee -a /etc/pacman.conf > /dev/null << 'EOF'
 [xlibre]
 Server = https://packages.xlibre.net/arch/stable/$arch
 EOF
+sudo pacman -Rnsdd wacomtablet
 sudo pacman -Sy
-sudo pacman -S xlibre-meta
+sudo pacman -S xlibre --noconfirm
