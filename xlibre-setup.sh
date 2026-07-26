@@ -9,4 +9,7 @@ Server = https://packages.xlibre.net/arch/stable/$arch
 EOF
 sudo pacman -Rnsdd wacomtablet
 sudo pacman -Sy
-sudo pacman -S xlibre --noconfirm
+echo '============================'
+echo ' Do YES for the conflicts:'
+echo '============================'
+sudo pacman -S xlibre xlibre-meta
