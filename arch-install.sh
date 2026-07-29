@@ -171,6 +171,11 @@ EOF
 pacman -S --noconfirm networkmanager vim nano
 systemctl enable NetworkManager
 
+# Generate the locales
+sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
 # ---------------------------------------------------------------------------
 # GRUB
 # ---------------------------------------------------------------------------
