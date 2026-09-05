@@ -12,37 +12,32 @@ warn()  { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 die()   { echo -e "${RED}[FAIL]${NC}  $*"; exit 1; }
 ask()   { echo -e "${CYAN}[INPUT]${NC} $*"; }
 
-# =============================================================================
-# Sanity checks
-# =============================================================================
 for cmd in pacstrap genfstab arch-chroot; do
     command -v "$cmd" &>/dev/null \
         || die "'$cmd' not found. Are you booted from the Arch live ISO?"
 done
 
-# =============================================================================
-# Reminders
-# =============================================================================
 clear
 echo ""
-echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║             ARCH INSTALLER                             ║${NC}"
-echo -e "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
+echo -e "${CYAN}============================================================${NC}"
+echo -e "${CYAN}=                     ARCH INSTALLER                       =${NC}"
+echo -e "${CYAN}============================================================${NC}"
 echo ""
-info "This script will install Arch to /mnt."
+info "This script will install Arch Linux to /mnt/"
 info "Your partitions must be formatted and mounted BEFORE continuing."
 echo ""
+echo "Here are some partition examples:"
 echo "  Mount commands (UEFI):"
 echo ""
-echo "    mount /dev/sdaR /mnt"
-echo "    mkdir -p /mnt/boot/efi"
-echo "    mount /dev/sdaB /mnt/boot/efi"
-echo "    swapon /dev/sdaX"
+echo "    mount /dev/sda2 /mnt/gentoo --mkdir"
+echo "    mount /dev/sda1 /mnt/gentoo/efi --mkdir"
+echo ""
+echo "  For BIOS/GPT, you MUST have a 1MB BIOS BOOT partition."
+echo "  Do NOT format or mount it."
 echo ""
 echo "  Mount commands (BIOS):"
 echo ""
-echo "    mount /dev/sdaR /mnt"
-echo "    swapon /dev/sdaX"
+echo "    mount /dev/sda1 /mnt/gentoo --mkdir"
 echo ""
 warn "If your partitions are NOT yet mounted, press Ctrl+C now,"
 warn "mount them, then re-run this script."
@@ -54,9 +49,6 @@ mountpoint -q /mnt || die "/mnt is not mounted."
 info "Root mount point verified."
 echo ""
 
-# =============================================================================
-# Boot mode selection
-# =============================================================================
 info "============================================================"
 info " BOOT MODE"
 info "============================================================"
@@ -92,9 +84,6 @@ echo ""
 info "Selected: boot=$BOOT_MODE"
 echo ""
 
-# =============================================================================
-# System configuration
-# =============================================================================
 info "============================================================"
 info " SYSTEM CONFIGURATION"
 info "============================================================"
@@ -112,9 +101,6 @@ echo ""
 read -rp "  Press ENTER to continue..."
 echo ""
 
-# =============================================================================
-# Base install
-# =============================================================================
 info "============================================================"
 info " BASE INSTALL"
 info "============================================================"
@@ -123,9 +109,6 @@ echo ""
 info "Installing base and the kernel..."
 pacstrap /mnt base base-devel linux linux-firmware sof-firmware
 
-# =============================================================================
-# fstab
-# =============================================================================
 info "============================================================"
 info " FSTAB"
 info "============================================================"
@@ -136,9 +119,6 @@ info "fstab contents:"
 cat /mnt/etc/fstab
 echo ""
 
-# =============================================================================
-# In-chroot script
-# =============================================================================
 info "============================================================"
 info " WRITING IN-CHROOT SCRIPT"
 info "============================================================"
@@ -165,9 +145,6 @@ cat > /etc/hosts <<EOF
 127.0.1.1   \${NEW_HOSTNAME}.localdomain \${NEW_HOSTNAME}
 EOF
 
-# ---------------------------------------------------------------------------
-# Service setup
-# ---------------------------------------------------------------------------
 pacman -S --noconfirm networkmanager vim nano
 systemctl enable NetworkManager
 
@@ -176,9 +153,6 @@ sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-# ---------------------------------------------------------------------------
-# GRUB
-# ---------------------------------------------------------------------------
 info "Installing GRUB..."
 
 if [ "\${BOOT_MODE}" = "uefi" ]; then
@@ -191,18 +165,12 @@ fi
 
 grub-mkconfig -o /boot/grub/grub.cfg
 
-# ---------------------------------------------------------------------------
-# Root password
-# ---------------------------------------------------------------------------
 echo ""
 info "============================================================"
 info " Set the ROOT password:"
 info "============================================================"
 passwd
 
-# ---------------------------------------------------------------------------
-# Optional new user
-# ---------------------------------------------------------------------------
 echo ""
 echo -e "\${CYAN}[INPUT]\${NC} Would you like to create a new user? (y/n)"
 read -rp "  Choice: " CREATE_USER
@@ -223,9 +191,6 @@ else
     info "Skipping user creation."
 fi
 
-# ---------------------------------------------------------------------------
-# Done
-# ---------------------------------------------------------------------------
 echo ""
 info "============================================================"
 info " Installation complete!"
@@ -242,9 +207,6 @@ chmod +x /mnt/root/chroot-install.sh
 info "In-chroot script written."
 echo ""
 
-# =============================================================================
-# Chroot
-# =============================================================================
 info "============================================================"
 info " ENTERING CHROOT"
 info "============================================================"
@@ -252,9 +214,6 @@ echo ""
 
 arch-chroot /mnt /bin/bash /root/chroot-install.sh
 
-# =============================================================================
-# Cleanup
-# =============================================================================
 info "============================================================"
 info " CLEANUP"
 info "============================================================"
