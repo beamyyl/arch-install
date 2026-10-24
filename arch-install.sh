@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# Arch Install Script — made by beamyyl (archinstall SUX!)
+# Random arch install script, since archinstall SUX!!!
 # Supports: UEFI or BIOS
 # =============================================================================
 
